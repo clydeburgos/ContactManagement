@@ -132,6 +132,15 @@ namespace ContactManagement.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> GetContacts()
+        {
+            var contacts = await _context.Contacts.ToListAsync();
+            return Json(contacts);
+        }
+
+
         private bool ContactExists(int id)
         {
             return _context.Contacts.Any(e => e.Id == id);
