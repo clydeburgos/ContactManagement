@@ -5,7 +5,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-success">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create Contact</a>
 </p>
 <table class="table table-sm table-striped table-hover" id="contacts-table">
     <thead class="thead-dark">
@@ -37,8 +37,7 @@
                 {
                     "data": "id",
                     "render": function (data, type, row, meta) {
-                        return '<a href="/Contacts/Edit/' + data + '">Edit</a> | ' +
-                            '<a href="/Contacts/Details/' + data + '">Details</a> | ' +
+                        return '<a href="/Contacts/Edit/' + data + '">View</a> | ' +
                             '<a href="/Contacts/Delete/' + data + '">Delete</a>';
                     }
                 }
