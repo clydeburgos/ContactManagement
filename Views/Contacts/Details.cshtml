@@ -1,6 +1,7 @@
 @{
     ViewData["Title"] = "Details";
 }
+@model ContactManagement.Models.Contact
 
 <h1>Details</h1>
 <h4>Contact</h4>
@@ -30,7 +31,7 @@
         <dd class="col-sm-10" id="address"></dd>
     </dl>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     $(document).ready(function () {
         var contactId = @Model?.Id; // Assuming you have the contact ID available somehow

@@ -22,19 +22,7 @@ namespace ContactManagement.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var contact = await _context.Contacts
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (contact == null)
-            {
-                return NotFound();
-            }
-
-            return View(contact);
+            return View(new Contact() { Id = id.Value });
         }
         public IActionResult Create()
         {
@@ -56,17 +44,7 @@ namespace ContactManagement.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var contact = await _context.Contacts.FindAsync(id);
-            if (contact == null)
-            {
-                return NotFound();
-            }
-            return View(contact);
+            return View(new Contact() { Id = id.Value });
         }
 
         [HttpPost]
@@ -149,6 +127,32 @@ namespace ContactManagement.Controllers
                 return NotFound();
             }
             return Json(contact);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(Contact contact)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingContact = _context.Contacts.FirstOrDefault(c => c.Id == contact.Id);
+                if (existingContact == null)
+                {
+                    return NotFound();
+                }
+
+                existingContact.FirstName = contact.FirstName;
+                existingContact.LastName = contact.LastName;
+                existingContact.Email = contact.Email;
+                existingContact.PhoneNumber = contact.PhoneNumber;
+                existingContact.Address = contact.Address;
+
+                _context.Update(existingContact);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true });
+            }
+
+            return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors) });
         }
         private bool ContactExists(int id)
         {
