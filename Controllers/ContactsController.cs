@@ -29,19 +29,6 @@ namespace ContactManagement.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,PhoneNumber,Address")] Contact contact)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(contact);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(contact);
-        }
-
         public async Task<IActionResult> Edit(int? id)
         {
             return View(new Contact() { Id = id.Value });
@@ -154,6 +141,20 @@ namespace ContactManagement.Controllers
 
             return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors) });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Contact contact)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Contacts.Add(contact);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+
+            return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors) });
+        }
+
         private bool ContactExists(int id)
         {
             return _context.Contacts.Any(e => e.Id == id);

@@ -1,5 +1,4 @@
 @model ContactManagement.Models.Contact
-
 @{
     ViewData["Title"] = "Create";
 }
@@ -13,31 +12,31 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form id="create-contact-form">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
+                <input id="FirstName" name="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
+                <input id="LastName" name="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
+                <input id="Email" name="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
+                <input id="PhoneNumber" name="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
+                <input id="Address" name="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <br />
@@ -49,5 +48,34 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            $('#create-contact-form').submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: '@Url.Action("Create", "Contacts")',
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            window.location.href = '@Url.Action("Index", "Contacts")';
+                        } else {
+                            var validationSummary = $('.text-danger');
+                            validationSummary.empty();
+                            response.errors.forEach(function (error) {
+                                validationSummary.append('<p>' + error.errorMessage + '</p>');
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error creating contact: ", error);
+                    }
+                });
+            });
+        });
+    </script>
 }
