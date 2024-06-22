@@ -9,8 +9,8 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
+<table class="table table-sm table-striped table-hover" id="contacts-table">
+    <thead class="thead-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.FirstName)
@@ -57,3 +57,8 @@
 }
     </tbody>
 </table>
+<script>
+    $(document).ready(function () {
+        $('#contacts-table').DataTable();
+    });
+</script>
