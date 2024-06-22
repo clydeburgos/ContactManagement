@@ -62,6 +62,42 @@ namespace ContactManagement.Migrations
                             FirstName = "John",
                             LastName = "Doe",
                             PhoneNumber = "123-456-7890"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "123 Main St",
+                            Email = "jane.doe@example.com",
+                            FirstName = "Jane",
+                            LastName = "Doe",
+                            PhoneNumber = "123-456-7890"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Address = "123 Main St",
+                            Email = "bob.doe@example.com",
+                            FirstName = "Bob",
+                            LastName = "Doe",
+                            PhoneNumber = "123-456-7890"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Address = "123 Main St",
+                            Email = "alice.doe@example.com",
+                            FirstName = "Alice",
+                            LastName = "Doe",
+                            PhoneNumber = "123-456-7890"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Address = "123 Main St",
+                            Email = "charlie.doe@example.com",
+                            FirstName = "Charlie",
+                            LastName = "Doe",
+                            PhoneNumber = "123-456-7890"
                         });
                 });
 #pragma warning restore 612, 618
