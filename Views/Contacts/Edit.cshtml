@@ -57,100 +57,103 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        $(document).ready(function () {
-            var contactId = @Model?.Id;
-            var map;
-            var marker;
-            var autocomplete;
-            var geocoder = new google.maps.Geocoder();
 
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: -34.397, lng: 150.644 },
-                zoom: 8
-            });
+        setTimeout(
+            $(document).ready(function () {
+                var contactId = @Model?.Id;
+                var map;
+                var marker;
+                var autocomplete;
+                var geocoder = new google.maps.Geocoder();
 
-
-            autocomplete = new google.maps.places.Autocomplete(
-                document.getElementById('Address'),
-                { types: ['geocode'] }
-            );
-
-            autocomplete.addListener('place_changed', function () {
-                var place = autocomplete.getPlace();
-                if (!place.geometry) {
-                    alert("No details available for input: '" + place.name + "'");
-                    return;
-                }
-
-                if (marker) {
-                    marker.setMap(null);
-                }
-
-                marker = new google.maps.Marker({
-                    position: place.geometry.location,
-                    map: map
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: { lat: -34.397, lng: 150.644 },
+                    zoom: 8
                 });
 
-                map.setCenter(place.geometry.location);
-                map.setZoom(15);
-            });
 
-            $.ajax({
-                url: '@Url.Action("GetContactDetails", "Contacts")',
-                type: 'GET',
-                data: { id: contactId },
-                success: function (data) {
-                    $('#Id').val(data.id);
-                    $('#FirstName').val(data.firstName);
-                    $('#LastName').val(data.lastName);
-                    $('#Email').val(data.email);
-                    $('#PhoneNumber').val(data.phoneNumber);
-                    $('#Address').val(data.address);
+                autocomplete = new google.maps.places.Autocomplete(
+                    document.getElementById('Address'),
+                    { types: ['geocode'] }
+                );
 
-                    if (data.address) {
-                        geocodeAddress(data.address);
+                autocomplete.addListener('place_changed', function () {
+                    var place = autocomplete.getPlace();
+                    if (!place.geometry) {
+                        alert("No details available for input: '" + place.name + "'");
+                        return;
                     }
 
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error fetching contact details: ", error);
-                }
-            });
+                    if (marker) {
+                        marker.setMap(null);
+                    }
 
+                    marker = new google.maps.Marker({
+                        position: place.geometry.location,
+                        map: map
+                    });
 
-            $('#edit-contact-form').submit(function (e) {
-                e.preventDefault();
-                var formData = $(this).serialize();
+                    map.setCenter(place.geometry.location);
+                    map.setZoom(15);
+                });
+
                 $.ajax({
-                    url: '@Url.Action("Update", "Contacts")',
-                    type: 'POST',
-                    data: formData,
-                    success: function (response) {
-                        window.location.href = '@Url.Action("Index", "Contacts")';
+                    url: '@Url.Action("GetContactDetails", "Contacts")',
+                    type: 'GET',
+                    data: { id: contactId },
+                    success: function (data) {
+                        $('#Id').val(data.id);
+                        $('#FirstName').val(data.firstName);
+                        $('#LastName').val(data.lastName);
+                        $('#Email').val(data.email);
+                        $('#PhoneNumber').val(data.phoneNumber);
+                        $('#Address').val(data.address);
+
+                        if (data.address) {
+                            geocodeAddress(data.address);
+                        }
+
                     },
                     error: function (xhr, status, error) {
-                        console.error("Error updating contact: ", error);
+                        console.error("Error fetching contact details: ", error);
                     }
                 });
-            });
 
-            function geocodeAddress(address) {
-                geocoder.geocode({ 'address': address }, function (results, status) {
-                    if (status === 'OK') {
-                        map.setCenter(results[0].geometry.location);
-                        if (marker) {
-                            marker.setMap(null);
+
+                $('#edit-contact-form').submit(function (e) {
+                    e.preventDefault();
+                    var formData = $(this).serialize();
+                    $.ajax({
+                        url: '@Url.Action("Update", "Contacts")',
+                        type: 'POST',
+                        data: formData,
+                        success: function (response) {
+                            window.location.href = '@Url.Action("Index", "Contacts")';
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error updating contact: ", error);
                         }
-                        marker = new google.maps.Marker({
-                            map: map,
-                            position: results[0].geometry.location
-                        });
-                        map.setZoom(15);
-                    } else {
-                        alert('Geocode was not successful for the following reason: ' + status);
-                    }
+                    });
                 });
-            }
-        });
+
+                function geocodeAddress(address) {
+                    geocoder.geocode({ 'address': address }, function (results, status) {
+                        if (status === 'OK') {
+                            map.setCenter(results[0].geometry.location);
+                            if (marker) {
+                                marker.setMap(null);
+                            }
+                            marker = new google.maps.Marker({
+                                map: map,
+                                position: results[0].geometry.location
+                            });
+                            map.setZoom(15);
+                        } else {
+                            alert('Geocode was not successful for the following reason: ' + status);
+                        }
+                    });
+                }
+            })
+            ,1000);
     </script>
 }

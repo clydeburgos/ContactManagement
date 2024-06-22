@@ -56,11 +56,12 @@
     }
     <script>
 
-        $(document).ready(function () {
+        setTimeout(
+            $(document).ready(function () {
             var map;
             var marker;
             var autocomplete;
-            
+
             autocomplete = new google.maps.places.Autocomplete(
                 document.getElementById('Address'),
                 { types: ['geocode'] }
@@ -115,6 +116,10 @@
                     }
                 });
             });
-        });
+        }),
+
+        1000);
+
+        
     </script>
 }
