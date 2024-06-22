@@ -52,7 +52,14 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
+
         $(document).ready(function () {
+
+            var autocomplete = new google.maps.places.Autocomplete(
+                document.getElementById('Address'),
+                { types: ['geocode'] }
+            );
+
             $('#create-contact-form').submit(function (e) {
                 e.preventDefault();
                 var formData = $(this).serialize();
