@@ -140,7 +140,16 @@ namespace ContactManagement.Controllers
             return Json(contacts);
         }
 
-
+        [HttpGet]
+        public async Task<IActionResult> GetContactDetails(int id)
+        {
+            var contact = await _context.Contacts.FirstOrDefaultAsync(c => c.Id == id);
+            if (contact == null)
+            {
+                return NotFound();
+            }
+            return Json(contact);
+        }
         private bool ContactExists(int id)
         {
             return _context.Contacts.Any(e => e.Id == id);
